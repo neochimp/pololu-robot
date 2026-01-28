@@ -1,3 +1,7 @@
+//Macros for calculations. No magic numbers!
+#define MILLISECONDS_IN_SECOND 1000
+#define MILLIMETERS_IN_METER 1000
+#include <Pololu3piPlus32U4Motors.h>
 void setup() {
   // put your setup code here, to run once:
 
@@ -9,39 +13,56 @@ void loop() {
 }
 
 // ================== Task Sheet 6a =======================
+// for all functions, speed should be input in m/s,
+// distance in meters
+// duration in seconds
+// Also, delay() takes in milliseconds, and setSpeeds() takes mm/s
 
 void turnLeft(float duration, float speed){
-
+  Pololu3piPlus32U4::Motors::setSpeeds((int) -speed * MILLIMETERS_IN_METER, (int) speed * MILLIMETERS_IN_METER);
+  delay(duration * MILLISECONDS_IN_SECOND);
+  Halt();
 }
 
 void turnRight(float duration, float speed){
-
+  Pololu3piPlus32U4::Motors::setSpeeds((int) speed * MILLIMETERS_IN_METER, (int) -speed * MILLIMETERS_IN_METER);
+  delay(duration * MILLISECONDS_IN_SECOND);
+  Halt();
 }
 
 void Halt(){
-
+  Pololu3piPlus32U4::Motors::setSpeeds(0, 0);
 }
 
 void moveForward(float distance, float speed){
-
+  Pololu3piPlus32U4::Motors::setSpeeds((int) speed * MILLIMETERS_IN_METER, (int) speed * MILLIMETERS_IN_METER);
+  //gives the neccessary duration in milliseconds
+  float calculatedDelay = distance/speed * MILLISECONDS_IN_SECOND;
+  delay(calculatedDelay);
+  Halt();
 }
 
 void moveBackward(float distance, float speed){
+  Pololu3piPlus32U4::Motors::setSpeeds((int) -speed * MILLIMETERS_IN_METER, (int) -speed * MILLIMETERS_IN_METER);
+  //gives the neccessary duration in milliseconds
+  float calculatedDelay = distance/speed * MILLISECONDS_IN_SECOND;
+  delay(calculatedDelay);
+  Halt();
 
 }
 
 void moveForwardTurningLeft(float distance, float speed){
-
+ //TODO: Implement, formula can be found in lab doc
 }
 
 void moveForwardTurningRight(float distance, float speed){
-
+ //TODO: Implement, formula can be found in lab doc
 }
 
 void moveBackwardTurningLeft(float distance, float speed){
-
+ //TODO: Implement, formula can be found in lab doc
 }
 
 void moveBackwardTurningRight(float distance, float speed){
-
+ //TODO: Implement, formula can be found in lab doc
 }
