@@ -52,17 +52,29 @@ void moveBackward(float distance, float speed){
 }
 
 void moveForwardTurningLeft(float distance, float speed){
- //TODO: Implement, formula can be found in lab doc
+  Pololu3piPlus32U4::Motors::setSpeeds((int) speed * MILLIMETERS_IN_METER * 0.5, (int) speed * MILLIMETERS_IN_METER);
+  float calculatedDelay = distance/speed * MILLISECONDS_IN_SECOND;
+  delay(calculatedDelay);
+  Halt();
 }
 
 void moveForwardTurningRight(float distance, float speed){
- //TODO: Implement, formula can be found in lab doc
+  Pololu3piPlus32U4::Motors::setSpeeds((int) speed * MILLIMETERS_IN_METER, (int) speed * MILLIMETERS_IN_METER * 0.5);
+  float calculatedDelay = distance/speed * MILLISECONDS_IN_SECOND;
+  delay(calculatedDelay);
+  Halt();
 }
 
 void moveBackwardTurningLeft(float distance, float speed){
- //TODO: Implement, formula can be found in lab doc
+  Pololu3piPlus32U4::Motors::setSpeeds((int) -speed * MILLIMETERS_IN_METER, (int) -speed * MILLIMETERS_IN_METER * 0.5);
+  float calculatedDelay = distance/speed * MILLISECONDS_IN_SECOND;
+  delay(calculatedDelay);
+  Halt();
 }
 
 void moveBackwardTurningRight(float distance, float speed){
- //TODO: Implement, formula can be found in lab doc
+  Pololu3piPlus32U4::Motors::setSpeeds((int) -speed * MILLIMETERS_IN_METER * 0.5, (int) -speed * MILLIMETERS_IN_METER);
+  float calculatedDelay = distance/speed * MILLISECONDS_IN_SECOND;
+  delay(calculatedDelay);
+  Halt();
 }
