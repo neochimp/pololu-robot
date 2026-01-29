@@ -1,10 +1,8 @@
-//Macros for calculations. No magic numbers!
-#define MILLISECONDS_IN_SECOND 1000
-#define MILLIMETERS_IN_METER 1000
-#include <Pololu3piPlus32U4Motors.h>
+#include "my_robot.h"
+
 void setup() {
   // put your setup code here, to run once:
-
+  MyRobot testRobot(200.0);
 }
 
 void loop() {
@@ -17,7 +15,7 @@ void loop() {
 // distance in meters
 // duration in seconds
 // Also, delay() takes in milliseconds, and setSpeeds() takes mm/s
-
+/*
 void turnLeft(float duration, float speed){
   Pololu3piPlus32U4::Motors::setSpeeds((int) -speed * MILLIMETERS_IN_METER, (int) speed * MILLIMETERS_IN_METER);
   delay(duration * MILLISECONDS_IN_SECOND);
@@ -78,3 +76,4 @@ void moveBackwardTurningRight(float distance, float speed){
   delay(calculatedDelay);
   Halt();
 }
+*/
