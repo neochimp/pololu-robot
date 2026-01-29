@@ -34,22 +34,26 @@ void loop() {
 // Also, delay() takes in milliseconds, and setSpeeds() takes mm/s
 /*
 void turnLeft(float duration, float speed){
+  //To turn left, left motor and right motor need equal speed while left goes backward and right goes forward
   Pololu3piPlus32U4::Motors::setSpeeds((int) -speed * MILLIMETERS_IN_METER, (int) speed * MILLIMETERS_IN_METER);
   delay(duration * MILLISECONDS_IN_SECOND);
   Halt();
 }
 
 void turnRight(float duration, float speed){
+  //To turn right, left motor and right motor need equal speed while left goes forward and right goes backward
   Pololu3piPlus32U4::Motors::setSpeeds((int) speed * MILLIMETERS_IN_METER, (int) -speed * MILLIMETERS_IN_METER);
   delay(duration * MILLISECONDS_IN_SECOND);
   Halt();
 }
 
 void Halt(){
+  //sets both motors speed to 0 in order to stop
   Pololu3piPlus32U4::Motors::setSpeeds(0, 0);
 }
 
 void moveForward(float distance, float speed){
+  //In order to move straight forward both motors need to go the same speed
   Pololu3piPlus32U4::Motors::setSpeeds((int) speed * MILLIMETERS_IN_METER, (int) speed * MILLIMETERS_IN_METER);
   //gives the neccessary duration in milliseconds
   float calculatedDelay = distance/speed * MILLISECONDS_IN_SECOND;
@@ -58,6 +62,7 @@ void moveForward(float distance, float speed){
 }
 
 void moveBackward(float distance, float speed){
+  //To go straight backward both motors need to go the same speed in reverse
   Pololu3piPlus32U4::Motors::setSpeeds((int) -speed * MILLIMETERS_IN_METER, (int) -speed * MILLIMETERS_IN_METER);
   //gives the neccessary duration in milliseconds
   float calculatedDelay = distance/speed * MILLISECONDS_IN_SECOND;
@@ -67,13 +72,16 @@ void moveBackward(float distance, float speed){
 }
 
 void moveForwardTurningLeft(float distance, float speed){
+  //To go forward while turning left, the right motor needs to go faster than the left motor while both are going forward
   Pololu3piPlus32U4::Motors::setSpeeds((int) speed * MILLIMETERS_IN_METER * 0.5, (int) speed * MILLIMETERS_IN_METER);
+  //gives the neccessary duration in milliseconds
   float calculatedDelay = distance/speed * MILLISECONDS_IN_SECOND;
   delay(calculatedDelay);
   Halt();
 }
 
 void moveForwardTurningRight(float distance, float speed){
+  //To go forward while turning right, the left motor needs to go faster than the right motor while both are going forward
   Pololu3piPlus32U4::Motors::setSpeeds((int) speed * MILLIMETERS_IN_METER, (int) speed * MILLIMETERS_IN_METER * 0.5);
   float calculatedDelay = distance/speed * MILLISECONDS_IN_SECOND;
   delay(calculatedDelay);
@@ -81,14 +89,18 @@ void moveForwardTurningRight(float distance, float speed){
 }
 
 void moveBackwardTurningLeft(float distance, float speed){
+  //To go backward while turning left, the left motor needs to go faster than the right motor while both are in reverse
   Pololu3piPlus32U4::Motors::setSpeeds((int) -speed * MILLIMETERS_IN_METER, (int) -speed * MILLIMETERS_IN_METER * 0.5);
+  //gives the neccessary duration in milliseconds
   float calculatedDelay = distance/speed * MILLISECONDS_IN_SECOND;
   delay(calculatedDelay);
   Halt();
 }
 
 void moveBackwardTurningRight(float distance, float speed){
+  //To go backward while turning right, the right motor needs to go faster than the left motor while both are in reverse
   Pololu3piPlus32U4::Motors::setSpeeds((int) -speed * MILLIMETERS_IN_METER * 0.5, (int) -speed * MILLIMETERS_IN_METER);
+  //gives the neccessary duration in milliseconds
   float calculatedDelay = distance/speed * MILLISECONDS_IN_SECOND;
   delay(calculatedDelay);
   Halt();
