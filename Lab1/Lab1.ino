@@ -1,30 +1,52 @@
 #include <Pololu3piPlus32U4.h>
 #include "my_robot.h"
 
+//instantiate a robot with a speed of 0.1m/s
+MyRobot testRobot(0.1);
+
 void setup() {
   Serial.begin(9600);
   delay(15);
-  MyRobot testRobot(200.0);
 }
 
 void loop() {
-  //Sets the speeds for motors 
-  //The value of the input is given in mm/s with a maximum value of 400
-   
+  //initial delay
+  delay(10000);
   //move forward
+  testRobot.moveForward(1);
+  delay(1000);
 
   //move backwards
+  testRobot.moveBackward(1);
+  delay(1000);
 
-  //turn right(in place)
+  //turn right (in place)
+  testRobot.turnRight(0.94);
+  delay(1000);
 
   //turn left (in place)
+  testRobot.turnLeft(0.94);
+  delay(1000);
+  
+  //move forward while turning left
+  testRobot.moveForwardTurningLeft(1);
+  delay(1000);
 
   //move forward while turning right
+  testRobot.moveBackwardTurningRight(1);
+  delay(1000);
 
-  //move forward while turning left
+  //move backward while turning right
+  testRobot.moveForwardTurningRight(1);
+  delay(1000);
 
+  //move backward while turning left
+  testRobot.moveBackwardTurningLeft(1);
+  delay(1000);
 
   //halt
+  testRobot.Halt();
+  
 }
 
 // ================== Task Sheet 6a =======================
