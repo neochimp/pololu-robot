@@ -43,29 +43,52 @@ Odometry::Odometry(float diaL, float diaR, float w, int nL, int nR, int gearRati
 
 // USE ODOMETRY FORMULAS TO CALCULATE ROBOT'S NEW POSITION AND ORIENTATION
 void Odometry::update_odom(int left_encoder_counts, int right_encoder_counts, float &x, float &y, float &theta){
-	
+	//calculating change in encoder counts
+  int deltaR_counts = right_encoder_counts - _right_encoder_counts_prev;
+  int deltaL_counts = left_encoder_counts - _left_encoder_counts_prev;
+
+  //Calculating NR and NL
+  float rightCountsPerRev = _nR *_gearRatio;
+  float leftCountsPerRev = _nL * _gearRatio;
+
+  //Calculating distance traveled for wheels
+  float deltaR = (deltaR_counts / rightCountsPerRev) * PI * _diaR;
+  float deltaL = (deltaL_counts / leftCountsPerRev) * PI * _diaL;
+
   // IF USING dead reckoning, GET THE ANGLE _theta FROM IMU
-
-  // OTHERWISE, CALCULATE THE ANGLE _theta FROM ENCODERS DATA BASED ON THE FORMULA FROM THE LECTURES
-
+  if(_deadreckoning){
+    _imu.readGyro();
+    float angleRate = (_imu.g.z - _IMUavg_error);
+    _theta += angleRate * 0.0001;
+  }else{ // OTHERWISE, CALCULATE THE ANGLE _theta FROM ENCODERS DATA BASED ON THE FORMULA FROM THE LECTURES
+    _theta += (deltaR - deltaL)/_w;
+  }
+  
   // CALCULATE _x BASED ON THE FORMULA FROM THE LECTURES
+  _x += ((deltaR + deltaL) / 2.0) * cos(_theta);
 
   // CALCULATE _y BASED ON THE FORMULA FROM THE LECTURES
+  _y += ((deltaR + deltaL) / 2.0) * sin(_theta);
 
   // CALCULATE CUMULATIVE x, AND CUMULATIVE y. 
   //AKA UPDATE THE VALUE OF &x AND &y (THE PARAMETERS OF THE update_odom FUNCTIONS, WHICH ARE PASSED BY REFERENCE)
   //REMINDER: CUMULATIVE theta IS EQUAL TO _theta.
+  x = (float)_x;
+  y = (float)_y;
+  theta = (float)_theta;
 
   // PRINT THE x, y, theta VALUES ON OLED
+  printOLED.print_odom(x, y, theta);
 
   // PRINT THE x, y, theta VALUES ON SERIAL MONITOR
-      // Serial.print(" x:  "); 
-      // Serial.println(x); 
-      // Serial.println(" y:  ");
-      // Serial.println(y);
-      // Serial.print(" theta:  ");
-      // Serial.println(theta);
+  Serial.print(" x:  "); 
+  Serial.println(x); 
+  Serial.println(" y:  ");
+  Serial.println(y);
+  Serial.print(" theta:  ");
+  Serial.println(theta);
 
   // Save the current encoder values as the "previous" values, so you can use it in the next iteration
-
+  _right_encoder_counts_prev = right_encoder_counts;
+  _left_encoder_counts_prev = left_encoder_counts;
 }
