@@ -2,8 +2,10 @@
 #include <Servo.h>
 #include "printOLED.h"
 #include "odometry.h"
+#include "my_robot.h"
+
 using namespace Pololu3piPlus32U4;
-Motors motors;
+//Motors motors;
 Encoders encoders;
 
 
@@ -28,6 +30,8 @@ int16_t encCountsLeft = 0, encCountsRight = 0;
 
 float x = 0.0, y = 0.0, theta = 0.0;
 
+MyRobot robot(0.05);
+
 void setup() {
   Serial.begin(9600);
   delay(20);
@@ -35,6 +39,12 @@ void setup() {
 
 void loop() {  
 
+      //testing to see if new myDelay function works.
+      robot.moveForward(0.2);
+      robot.myDelay(200);
+      robot.moveBackward(0.2);
+      robot.myDelay(200);
+      
       //(TASK 2.1) Test Encoders while Staying Still 
 
       //IMPORT FUNCTIONS FROM LAB1 (MOVE FORWARD, TURN LEFT, ...) 
