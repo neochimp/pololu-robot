@@ -23,14 +23,14 @@ BY INSERTING THE PARAMETER VALUES FROM THE ROBOT DOCUMENTATION*/
 
 
 Odometry odometry(diaL, diaR, w, nL, nR, gearRatio, DEAD_RECKONING);
-
+PrintOLED printOLED2;
 
 int16_t deltaL=0, deltaR=0;
 int16_t encCountsLeft = 0, encCountsRight = 0;
 
 float x = 0.0, y = 0.0, theta = 0.0;
 
-MyRobot robot(0.05);
+MyRobot robot(0.15);
 
 void setup() {
   Serial.begin(9600);
@@ -40,12 +40,13 @@ void setup() {
 void loop() {  
 
       //testing to see if new myDelay function works.
-      robot.moveForward(0.2);
-      robot.myDelay(200);
-      robot.moveBackward(0.2);
-      robot.myDelay(200);
       
       //(TASK 2.1) Test Encoders while Staying Still 
+      //Serial.print("Left Encoder Count: "); 
+      //Serial.println(encCountsLeft);
+      //Serial.print("Right Encoder Count: "); 
+      //Serial.println(encCountsRight); 
+
 
       //IMPORT FUNCTIONS FROM LAB1 (MOVE FORWARD, TURN LEFT, ...) 
       //TO ENABLE ROBOT TO MOVE ONE METER FORWARD, CLOCKWISE AND COUNTERCLOCKWISE
@@ -59,16 +60,45 @@ void loop() {
       encCountsLeft += deltaL;
       encCountsRight += deltaR;
 
-
-      //(TASK 2.2) TEST ENCODERS WHILE MOVING EACH OF THE THREE MOVEMENTS LISTED BELOW (ONE AT A TIME) 
+         //(TASK 2.2) TEST ENCODERS WHILE MOVING EACH OF THE THREE MOVEMENTS LISTED BELOW (ONE AT A TIME) 
       //(NOTE: YOU SHOULD UPDATE AND USE PRIMITIVE FUNCTIONS FROM LAB1)
       //DO NOT DELETE CODE AFTER EACH TASK, COMMENT OUT INSTEAD
       
       //(2.2a) MOVE FORWARD ON A STRAIGHT LINE FOR ONE METER 
+      
+      /*
+      robot.moveForward(1);
+      printOLED2.print_float(encCountsLeft);
+      Serial.print("Left Encoder Count: "); 
+      Serial.println(encCountsLeft);
+      Serial.print("Right Encoder Count: "); 
+      Serial.println(encCountsRight);
+      delay(10000);
+      */
 
-      //(2.2b) MOVE FORWARD ON A STRAIGHT LINE FOR ONE METER
+      //(2.2b) MOVE BACKWARD ON A STRAIGHT LINE FOR ONE METER
+      
+      /*
+      robot.moveBackward(1);
+      printOLED2.print_float(encCountsLeft);
+      Serial.print("Left Encoder Count: "); 
+      Serial.println(encCountsLeft);
+      Serial.print("Right Encoder Count: "); 
+      Serial.println(encCountsRight);
+      delay(10000);
+      */
 
       //(2.2c) TURN LEFT FOR 90 DEGREES
+      
+      /*
+      robot.turnLeft(0.6);
+      printOLED2.print_float(encCountsLeft);
+      Serial.print("Left Encoder Count: "); 
+      Serial.println(encCountsLeft);
+      Serial.print("Right Encoder Count: "); 
+      Serial.println(encCountsRight);
+      delay(10000);
+      */
 
       // PRINT THE LEFT AND RIGHT ODOMETRY VALUES ON OLED
 
@@ -78,7 +108,7 @@ void loop() {
       //(TASK 3.1) IMPLEMENT ODOMETRY 
 
       /*UNCOMMENT Odometry.update_odom DOWN BELOW*/
-      //odometry.update_odom(encCountsLeft,encCountsRight, x, y, theta); //calculate robot's position
+      odometry.update_odom(encCountsLeft,encCountsRight, x, y, theta); //calculate robot's position
 
       /*NOW GO TO odometry.cpp file AND COMPLETE THE udate_odom FUNCTION. 
       IN odometry.cpp, ADD CODES TO ENABLE THE ROBOT TO 
@@ -90,8 +120,90 @@ void loop() {
       //DO NOT DELETE CODE AFTER EACH TASK, COMMENT OUT INSTEAD
 
       //(3.2a)  15-meter straight line down the hallway
+      
+      /*
+      robot.moveForward(3);
+      Read data from encoders
+      UpdateEncoders();
+      delay(1000);
+
+      robot.moveForward(3);
+      Read data from encoders
+      UpdateEncoders();
+      delay(1000);
+
+      robot.moveForward(3);
+      Read data from encoders
+      UpdateEncoders();
+      delay(1000);
+ 
+      robot.moveForward(3);
+      Read data from encoders
+      UpdateEncoders();
+      delay(1000);
+
+      robot.moveForward(3);
+      Read data from encoders
+      UpdateEncoders();
+      delay(1000);
+
+      delay(5000);
+      */
 
       //(3.2c)  1-meter square clockwise
       
-      //(3.3e)  1-meter square counterclockwise
+      /*
+      delay(5000);
+      robot.moveForward(1);
+      UpdateEncoders();
+
+      robot.turnRight(0.5);
+      robot.moveForward(1);
+      UpdateEncoders();
+
+      robot.turnRight(0.5);
+      robot.moveForward(1);
+      UpdateEncoders();
+
+      robot.turnRight(0.5);
+      robot.moveForward(1);
+      UpdateEncoders();
+
+      delay(10000);
+      */
+
+     //(3.3e)  1-meter square counterclockwise
+      
+      /*
+      delay(5000);
+      robot.moveForward(1);
+      UpdateEncoders();
+
+      robot.turnLeft(0.5);
+      robot.moveForward(1);
+      UpdateEncoders();
+
+      robot.turnLeft(0.5);
+      robot.moveForward(1);
+      UpdateEncoders();
+
+      robot.turnLeft(0.5);
+      robot.moveForward(1);
+      UpdateEncoders();
+
+      delay(10000);
+      */
+}
+
+//Function
+void UpdateEncoders(){
+  //Read data from encoders
+  deltaL = encoders.getCountsAndResetLeft();
+  deltaR = encoders.getCountsAndResetRight();
+
+  //Increment total encoder count
+  encCountsLeft += deltaL;
+  encCountsRight += deltaR;
+  odometry.update_odom(encCountsLeft,encCountsRight, x, y, theta); //calculate robot's position
+     
 }

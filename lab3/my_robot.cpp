@@ -40,7 +40,6 @@ void MyRobot::Halt(){
 //custom functon to replace myDelay() using millis.
 //variable time taken in milliseconds.
 void MyRobot::myDelay(float duration_ms){
-  Halt();
   unsigned long startMillis = millis(); //get the time at the start of the function
   unsigned long currentMillis = millis();
   //find the difference in time and keep waiting until we reach the specified time.
