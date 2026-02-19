@@ -11,7 +11,12 @@ class Pcontroller{
   private:
     //Add private variables here
     //Hint: There should be 6 variables in total
-	
+    float _kp;
+    double _minOutput;
+    double _maxOutput;
+    double _error;
+    double _rawOutput;
+    float _clampOut;
 };
 
 #endif
