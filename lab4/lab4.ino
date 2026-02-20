@@ -13,10 +13,10 @@ using namespace Pololu3piPlus32U4;
 #define gearRatio 75
 
 //Update kp and kd based on your testing
-#define minOutput -2.0
-#define maxOutput 2.0
-#define kp 0.1 //radians per second per cm
-#define base_speed 50 //50mm/s
+#define minOutput -10.0
+#define maxOutput 10.0
+#define kp 12 //I believe kp is the scalar for angular velocity
+#define base_speed 300 //50mm/s
 
 #define MM_IN_CM 10
 
@@ -34,13 +34,15 @@ double Pout;
 void setup() {
   Serial.begin(9600);
   servo.attach(5);
-  servo.write(0);
-  delay(40);
+  servo.write(90);
+  delay(10);
   //Move Sonar to desired direction using Servo
 }
 
 void loop() {
   //DO NOTE DELETE CODE AFTER EACH TASK, COMMENT OUT INSTEAD
+  servo.write(170);
+
   wallDist = sonar.readDist();
 
   //UNCOMMENT AFTER IMPLEMENTING Pcontroller
@@ -65,12 +67,11 @@ void loop() {
   Serial.println("cm\n");
   Serial.print("Angular Velocity: ");
   Serial.print(Pout);
-  Serial.println("rad/s");
+  Serial.println("rad/s per cm");
  
-  int leftVelocity = (int)constrain(calculateLeftWheelVelocity(base_speed, Pout * MM_IN_CM), -400, 400);
-  int rightVelocity = (int)constrain(calculateRightWheelVelocity(base_speed, Pout * MM_IN_CM), -400, 400);
+  int leftVelocity = (int)constrain(calculateLeftWheelVelocity(base_speed, Pout / MM_IN_CM), -400, 400);
+  int rightVelocity = (int)constrain(calculateRightWheelVelocity(base_speed, Pout / MM_IN_CM), -400, 400);
   motors.setSpeeds(leftVelocity, rightVelocity);
-
   Serial.print("Left velocity: ");
   Serial.println(leftVelocity);
   Serial.print("Right Velocity: ");
