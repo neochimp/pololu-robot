@@ -23,10 +23,10 @@ void loop() {
       printOLED.print_float(dist); // print to OLED screen     
       Serial.println(dist); //print to Tools>Serial Monitor
       // Turn servo to set location
-      //servo.write(0);
-      //delay(2000);  
-      //servo.write(180);
-      //delay(2000); 
+      servo.write(0);
+      delay(2000);  
+      servo.write(180);
+      delay(2000); 
 }
 
       

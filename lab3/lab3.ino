@@ -120,7 +120,7 @@ void loop() {
       //DO NOT DELETE CODE AFTER EACH TASK, COMMENT OUT INSTEAD
 
       //(3.2a)  15-meter straight line down the hallway
-      
+      robot.moveForward(1);
       /*
       robot.moveForward(3);
       Read data from encoders
