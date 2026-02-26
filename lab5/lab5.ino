@@ -13,11 +13,13 @@ using namespace Pololu3piPlus32U4;
 #define gearRatio 75
 
 //Update kp and kd based on your testing
-#define minOutput -100
-#define maxOutput 100
-#define kp 1
-#define kd 1
-#define base_speed 50
+#define minOutput -10.0
+#define maxOutput 10.0
+#define kp 6
+#define kd 6
+#define base_speed 150
+
+#define MM_IN_CM 10
 
 Motors motors;
 Servo servo;
@@ -34,6 +36,7 @@ void setup() {
   servo.attach(5);
   delay(40);
   //Move Sonar to desired direction using Servo
+  servo.write(170);
 }
 
 void loop() {
@@ -42,7 +45,7 @@ void loop() {
 
 
   //UNCOMMENT AFTER IMPLEMENTING PDcontroller
-  //PDout = PDcontroller.update(wallDist, distFromWall); //uncomment if using PDcontroller 
+  PDout = PDcontroller.update(wallDist, distFromWall); //uncomment if using PDcontroller 
 
   //(LAB 5 - TASK 3.1) IMPLEMENT PDCONTROLLER 
   
@@ -59,4 +62,31 @@ void loop() {
 
   //Also print outputs to serial monitor for testing purposes
 
+  //Also print outputs to serial monitor for testing purposes
+  Serial.print("Distance from wall: ");
+  Serial.print(wallDist);
+  Serial.println("cm\n");
+  Serial.print("Angular Velocity: ");
+  Serial.print(PDout);
+  Serial.println("rad/s per cm");
+ 
+  int leftVelocity = (int)constrain(calculateLeftWheelVelocity(base_speed, Pout / MM_IN_CM), -400, 400);
+  int rightVelocity = (int)constrain(calculateRightWheelVelocity(base_speed, Pout / MM_IN_CM), -400, 400);
+  motors.setSpeeds(leftVelocity, rightVelocity);
+  Serial.print("Left velocity: ");
+  Serial.println(leftVelocity);
+  Serial.print("Right Velocity: ");
+  Serial.println(rightVelocity);
+  Serial.println("-----\n");
+  
+}
+
+double calculateRightWheelVelocity(double baseSpeed, double angularVelocity){
+  double v = baseSpeed + ((w/2) * angularVelocity);
+  return v;
+}
+
+double calculateLeftWheelVelocity(double baseSpeed, double angularVelocity){
+  double v = baseSpeed - ((w/2) * angularVelocity);
+  return v;
 }
