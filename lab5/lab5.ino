@@ -13,11 +13,11 @@ using namespace Pololu3piPlus32U4;
 #define gearRatio 75
 
 //Update kp and kd based on your testing
-#define minOutput -10.0
-#define maxOutput 10.0
+#define minOutput -20.0
+#define maxOutput 20.0
 #define kp 6
-#define kd 6
-#define base_speed 150
+#define kd 3
+#define base_speed 400
 
 #define MM_IN_CM 10
 
@@ -30,13 +30,14 @@ PDcontroller PDcontroller(kp, kd, minOutput, maxOutput);
 const double distFromWall=10.0; // Goal distance from wall (cm)
 
 double wallDist;
+double PDout;
 
 void setup() {
   Serial.begin(9600);
   servo.attach(5);
   delay(40);
   //Move Sonar to desired direction using Servo
-  servo.write(170);
+  servo.write(150);
 }
 
 void loop() {
@@ -70,8 +71,8 @@ void loop() {
   Serial.print(PDout);
   Serial.println("rad/s per cm");
  
-  int leftVelocity = (int)constrain(calculateLeftWheelVelocity(base_speed, Pout / MM_IN_CM), -400, 400);
-  int rightVelocity = (int)constrain(calculateRightWheelVelocity(base_speed, Pout / MM_IN_CM), -400, 400);
+  int leftVelocity = (int)constrain(calculateLeftWheelVelocity(base_speed, PDout), -400, 400);
+  int rightVelocity = (int)constrain(calculateRightWheelVelocity(base_speed, PDout), -400, 400);
   motors.setSpeeds(leftVelocity, rightVelocity);
   Serial.print("Left velocity: ");
   Serial.println(leftVelocity);
