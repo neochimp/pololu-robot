@@ -1,8 +1,8 @@
 #include <Pololu3piPlus32U4.h>
 #include "printOLED.h"
 #include "PIDcontroller.h"
-//#include "odometry.h" //If using odometry, import odometry.h and odometry.cpp
-//#include "PDcontroller.h" //Import your PDcontroller.h and PDcontroller.cpp then uncomment
+// #include "odometry.h" //If using odometry, import odometry.h and odometry.cpp
+// #include "PDcontroller.h" //Import your PDcontroller.h and PDcontroller.cpp then uncomment
 using namespace Pololu3piPlus32U4;
 
 Motors motors;
@@ -32,7 +32,7 @@ Encoders encoders;
 
 //Feel free to use this in your PD/PID controller for target values
 // Given goals in cm and radians
-const float goal_theta = ... // Must put in radians
+const float goal_theta = 1; // Must put in radians
 
 //odometry
 int16_t deltaL=0, deltaR=0;
@@ -60,7 +60,7 @@ void loop() {
   encCountsLeft += deltaL;
   encCountsRight += deltaR;  
 
-  odometry.update_odom(encCountsLeft,encCountsRight, x, y, theta); //calculate robot's position
+  //odometry.update_odom(encCountsLeft,encCountsRight, x, y, theta); //calculate robot's position
 
 
 
