@@ -92,3 +92,7 @@ void Odometry::update_odom(int left_encoder_counts, int right_encoder_counts, fl
   _right_encoder_counts_prev = right_encoder_counts;
   _left_encoder_counts_prev = left_encoder_counts;
 }
+
+double getTheta(){
+  return _theta;
+}

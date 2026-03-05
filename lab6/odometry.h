@@ -7,7 +7,7 @@ class Odometry{
   public:
     Odometry::Odometry(float diaL, float diaR, float w, int nL, int nR, int gearRatio, bool dead_reckoning);
     void Odometry::update_odom(int left_encoder_counts, int right_encoder_counts, float &x, float &y, float &theta);
-    
+    double getTheta();   
   private:
     float _diaL;
     float _diaR;

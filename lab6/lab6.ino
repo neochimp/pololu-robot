@@ -26,13 +26,14 @@ Encoders encoders;
 #define clamp_i ... //Tune ki integral clamp here
 #define base_speed 50
 
+#define PI 3.14159
 //Odometry odometry(diaL, diaR, w, nL, nR, gearRatio, DEAD_RECKONING); //Uncomment if using odometry class
 //PDcontroller pdcontroller(kp, kd, minOutput, maxOutput); //Uncomment when using PDController
 //PIDcontroller pidcontroller(kp, ki, kd, minOutput, maxOutput, clamp_i); //Uncomment after you implement PIDController
 
 //Feel free to use this in your PD/PID controller for target values
 // Given goals in cm and radians
-const float goal_theta = 1; // Must put in radians
+const float goal_theta = PI; // Must put in radians
 
 //odometry
 int16_t deltaL=0, deltaR=0;
@@ -53,17 +54,9 @@ void loop() {
   //Use this code if you are using odometry. Comment out if you are not.
   //If using, consider turning this into its own function for repeated use.
   // Read data from encoders
-  deltaL = encoders.getCountsAndResetLeft();
-  deltaR = encoders.getCountsAndResetRight();
+  refreshOdometry();
 
-  // Increment total encoder cound
-  encCountsLeft += deltaL;
-  encCountsRight += deltaR;  
-
-  //odometry.update_odom(encCountsLeft,encCountsRight, x, y, theta); //calculate robot's position
-
-
-
+  current_theta = odometry.getTheta();
 
   //Lab 6
   //Note: To help with testing, print the theta and PD/PID outputs to serial monitor.
@@ -74,15 +67,66 @@ void loop() {
   measuring the angle of your robot.*/
   
   /*TASK 2.2
-  Utilize your PDController to go to angles PI, PI/2, and PI/2.
+  Utilize your PDController to go to angles PI, -PI/2, and PI/2.
   Write your code below and comment out when moving to next task.*/
+  
+  PDout = PDcontroller.update(current_theta, goal_theta);
+  Serial.print("Current Theta: ");
+  Serial.println(current_theta);
+  Serial.print("PDout: ");
+  Serial.println(PDout);
+  Serial.println();
 
-  /*TASK 3.1
+  int leftVelocity = (int)constrain(calculateLeftWheelVelocity(0, PDout), -400, 400);
+  int rightVelocity = (int)constrain(calculateRightWheelVelocity(0, PDout), -400, 400);
+  motors.setSpeeds(leftVelocity, rightVelocity);
+
+    /*TASK 3.1
   Implement PID controller to use for task 3.2.*/
 
   /*TASK 3.2
   Utilize your PIDController to go to angles PI, PI/2, and PI/2.
   Write your code below.*/
+  
+  /*
+  PIDout = PIDcontroller.update(current_theta, goal_theta);
+  Serial.print("Current Theta: ");
+  Serial.println(current_theta);
+  Serial.print("PIDout: ");
+  Serial.println(PIDout);
+  Serial.println();
 
+  int leftVelocity = (int)constrain(calculateLeftWheelVelocity(0, PIDout), -400, 400);
+  int rightVelocity = (int)constrain(calculateRightWheelVelocity(0, PIDout), -400, 400);
+  motors.setSpeeds(leftVelocity, rightVelocity);
+  */
 
+  Serial.print("Left velocity: ");
+  Serial.println(leftVelocity);
+  Serial.print("Right Velocity: ");
+  Serial.println(rightVelocity);
+  Serial.println("-----\n");
+  
+
+}
+
+void refreshOdometry(){
+  deltaL = encoders.getCountsAndResetLeft();
+  deltaR = encoders.getCountsAndResetRight();
+
+  // Increment total encoder cound
+  encCountsLeft += deltaL;
+  encCountsRight += deltaR;  
+
+  odometry.update_odom(encCountsLeft,encCountsRight, x, y, theta); //calculate robot's position
+}
+
+double calculateRightWheelVelocity(double baseSpeed, double angularVelocity){
+  double v = baseSpeed + ((w/2) * angularVelocity);
+  return v;
+}
+
+double calculateLeftWheelVelocity(double baseSpeed, double angularVelocity){
+  double v = baseSpeed - ((w/2) * angularVelocity);
+  return v;
 }
