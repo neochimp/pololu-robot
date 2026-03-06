@@ -42,7 +42,7 @@ Odometry::Odometry(float diaL, float diaR, float w, int nL, int nR, int gearRati
 }
 
 // USE ODOMETRY FORMULAS TO CALCULATE ROBOT'S NEW POSITION AND ORIENTATION
-void Odometry::update_odom(int left_encoder_counts, int right_encoder_counts, float &x, float &y, float &theta){
+float Odometry::update_odom(int left_encoder_counts, int right_encoder_counts, float &x, float &y, float &theta){
 	//calculating change in encoder counts
   int deltaR_counts = right_encoder_counts - _right_encoder_counts_prev;
   int deltaL_counts = left_encoder_counts - _left_encoder_counts_prev;
@@ -91,8 +91,6 @@ void Odometry::update_odom(int left_encoder_counts, int right_encoder_counts, fl
   // Save the current encoder values as the "previous" values, so you can use it in the next iteration
   _right_encoder_counts_prev = right_encoder_counts;
   _left_encoder_counts_prev = left_encoder_counts;
-}
 
-double getTheta(){
-  return _theta;
+  return theta;
 }

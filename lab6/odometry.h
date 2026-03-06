@@ -6,8 +6,7 @@ using namespace Pololu3piPlus32U4;
 class Odometry{
   public:
     Odometry::Odometry(float diaL, float diaR, float w, int nL, int nR, int gearRatio, bool dead_reckoning);
-    void Odometry::update_odom(int left_encoder_counts, int right_encoder_counts, float &x, float &y, float &theta);
-    double getTheta();   
+    float Odometry::update_odom(int left_encoder_counts, int right_encoder_counts, float &x, float &y, float &theta);
   private:
     float _diaL;
     float _diaR;

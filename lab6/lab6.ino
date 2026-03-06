@@ -1,8 +1,8 @@
 #include <Pololu3piPlus32U4.h>
 #include "printOLED.h"
 #include "PIDcontroller.h"
-// #include "odometry.h" //If using odometry, import odometry.h and odometry.cpp
-// #include "PDcontroller.h" //Import your PDcontroller.h and PDcontroller.cpp then uncomment
+#include "odometry.h" //If using odometry, import odometry.h and odometry.cpp
+#include "PDcontroller.h" //Import your PDcontroller.h and PDcontroller.cpp then uncomment
 using namespace Pololu3piPlus32U4;
 
 Motors motors;
@@ -18,22 +18,22 @@ Encoders encoders;
 #define DEAD_RECKONING false
 
 //Update kp, kd, and ki based on your testing
-#define minOutput -100
-#define maxOutput 100
-#define kp ... //Tune Kp here
-#define kd ... //Tune Kd here
-#define ki ... //Tune Ki here
-#define clamp_i ... //Tune ki integral clamp here
+#define minOutput -15
+#define maxOutput 15
+#define kp 10 //Tune Kp here
+#define kd 6 //Tune Kd here
+#define ki 2 //Tune Ki here
+#define clamp_i 4 //Tune ki integral clamp here
 #define base_speed 50
 
 #define PI 3.14159
-//Odometry odometry(diaL, diaR, w, nL, nR, gearRatio, DEAD_RECKONING); //Uncomment if using odometry class
-//PDcontroller pdcontroller(kp, kd, minOutput, maxOutput); //Uncomment when using PDController
-//PIDcontroller pidcontroller(kp, ki, kd, minOutput, maxOutput, clamp_i); //Uncomment after you implement PIDController
+Odometry odometry(diaL, diaR, w, nL, nR, gearRatio, DEAD_RECKONING); //Uncomment if using odometry class
+PDcontroller PDcontroller(kp, kd, minOutput, maxOutput); //Uncomment when using PDController
+PIDcontroller PIDcontroller(kp, ki, kd, minOutput, maxOutput, clamp_i); //Uncomment after you implement PIDController
 
 //Feel free to use this in your PD/PID controller for target values
 // Given goals in cm and radians
-const float goal_theta = PI; // Must put in radians
+const float goal_theta = PI/2; // Must put in radians
 
 //odometry
 int16_t deltaL=0, deltaR=0;
@@ -47,6 +47,7 @@ double PDout, PIDout; //Output variables for your controllers
 
 void setup() {
   Serial.begin(9600);
+  delay(40);
 }
 
 void loop() {
@@ -55,8 +56,6 @@ void loop() {
   //If using, consider turning this into its own function for repeated use.
   // Read data from encoders
   refreshOdometry();
-
-  current_theta = odometry.getTheta();
 
   //Lab 6
   //Note: To help with testing, print the theta and PD/PID outputs to serial monitor.
@@ -69,10 +68,11 @@ void loop() {
   /*TASK 2.2
   Utilize your PDController to go to angles PI, -PI/2, and PI/2.
   Write your code below and comment out when moving to next task.*/
-  
-  PDout = PDcontroller.update(current_theta, goal_theta);
+
+/*
+  PDout = PDcontroller.update(theta, goal_theta);
   Serial.print("Current Theta: ");
-  Serial.println(current_theta);
+  Serial.println(theta);
   Serial.print("PDout: ");
   Serial.println(PDout);
   Serial.println();
@@ -80,6 +80,7 @@ void loop() {
   int leftVelocity = (int)constrain(calculateLeftWheelVelocity(0, PDout), -400, 400);
   int rightVelocity = (int)constrain(calculateRightWheelVelocity(0, PDout), -400, 400);
   motors.setSpeeds(leftVelocity, rightVelocity);
+*/
 
     /*TASK 3.1
   Implement PID controller to use for task 3.2.*/
@@ -88,10 +89,10 @@ void loop() {
   Utilize your PIDController to go to angles PI, PI/2, and PI/2.
   Write your code below.*/
   
-  /*
-  PIDout = PIDcontroller.update(current_theta, goal_theta);
+  
+  PIDout = PIDcontroller.update(theta, goal_theta);
   Serial.print("Current Theta: ");
-  Serial.println(current_theta);
+  Serial.println(theta);
   Serial.print("PIDout: ");
   Serial.println(PIDout);
   Serial.println();
@@ -99,7 +100,7 @@ void loop() {
   int leftVelocity = (int)constrain(calculateLeftWheelVelocity(0, PIDout), -400, 400);
   int rightVelocity = (int)constrain(calculateRightWheelVelocity(0, PIDout), -400, 400);
   motors.setSpeeds(leftVelocity, rightVelocity);
-  */
+  
 
   Serial.print("Left velocity: ");
   Serial.println(leftVelocity);
@@ -118,15 +119,15 @@ void refreshOdometry(){
   encCountsLeft += deltaL;
   encCountsRight += deltaR;  
 
-  odometry.update_odom(encCountsLeft,encCountsRight, x, y, theta); //calculate robot's position
+  theta = odometry.update_odom(encCountsLeft,encCountsRight, x, y, theta); //calculate robot's position
 }
 
 double calculateRightWheelVelocity(double baseSpeed, double angularVelocity){
-  double v = baseSpeed + ((w/2) * angularVelocity);
+  double v = baseSpeed - ((w/2) * angularVelocity);
   return v;
 }
 
 double calculateLeftWheelVelocity(double baseSpeed, double angularVelocity){
-  double v = baseSpeed - ((w/2) * angularVelocity);
+  double v = baseSpeed + ((w/2) * angularVelocity);
   return v;
 }
