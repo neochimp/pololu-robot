@@ -19,20 +19,20 @@ Encoders encoders;
 //Update kp, kd, and ki based on your testing (First PIDcontroller for angle)
 #define minOutputAng -100
 #define maxOutputAng 100
-#define kpAng 10 //Tune Kp here
-#define kdAng 6 //Tune Kd here
+#define kpAng 1 //Tune Kp here
+#define kdAng 5 //Tune Kd here
 #define kiAng 2 //Tune Ki here
-#define clamp_iAng 4 //Tune ki integral clamp here
-#define base_speedAng 50
+#define clamp_iAng 3//Tune ki integral clamp here
+#define base_speedAng 150
 
 //Update kp, kd, and ki based on your testing (Second PIDcontroller for velocity) (Task 2.3)
 #define minOutputVel -100
 #define maxOutputVel 100
-#define kpVel 10 //Tune Kp here
-#define kdVel 6 //Tune Kd here
-#define kiVel 2 //Tune Ki here
+#define kpVel 2 //Tune Kp here
+#define kdVel 4 //Tune Kd here
+#define kiVel 1 //Tune Ki here
 #define clamp_iVel 4 //Tune ki integral clamp here
-#define base_speedVel 50
+#define base_speedVel 2
 
 Odometry odometry(diaL, diaR, w, nL, nR, gearRatio, DEAD_RECKONING); //Uncomment if using odometry class
 PIDcontroller pidcontroller(kpAng, kiAng, kdAng, minOutputAng, maxOutputAng, clamp_iAng); //Uncomment after you import PIDController
@@ -93,7 +93,7 @@ void loop() {
   actual_angle = atan2(?, ?);
   
   Write your code below and comment out when moving to the next task.*/
-
+/*
   refreshOdometry();
 
   //calculating distance differences
@@ -127,13 +127,13 @@ void loop() {
   Serial.println(PIDout_theta);
   Serial.println("-----\n");
 
+*/
 
   /*TASK 2.2
   Improve the baseline solution by telling the robot to stop when it gets close 
   enough to the goal.
   Write your code below and comment out when moving to the next task.*/
-
-  /* Task 2.2
+/*
   refreshOdometry();
 
   //calculating distance differences
@@ -174,13 +174,13 @@ void loop() {
     Serial.println(PIDout_theta);
     Serial.println("-----\n");
   }
-  */
+*/
 
   /*TASK 2.3
   Improve the solution further by using a second PID controller to control the velocity
   as it goes towards the goal.
   Write your code below.*/
-  /*
+  
   refreshOdometry();
 
   //calculating distance differences
@@ -219,7 +219,7 @@ void loop() {
     Serial.println(PIDout_distance);
     Serial.println("-----\n");
   }
-*/
+
 
 }
 
