@@ -37,6 +37,7 @@ Encoders encoders;
 Odometry odometry(diaL, diaR, w, nL, nR, gearRatio, DEAD_RECKONING); //Uncomment if using odometry class
 PIDcontroller pidcontroller(kpAng, kiAng, kdAng, minOutputAng, maxOutputAng, clamp_iAng); //Uncomment after you import PIDController
 //Write your second PIDcontroller object here (Task 2.3)
+PIDcontroller pidcontroller_vel(kpVel, kiVel, kdVel, minOutputVel, maxOutputVel, clamp_iVel); //Uncomment after you import PIDController
 
 //Feel free to use this in your PD/PID controller for target values
 // Given goals in cm and radians
@@ -179,7 +180,46 @@ void loop() {
   Improve the solution further by using a second PID controller to control the velocity
   as it goes towards the goal.
   Write your code below.*/
+  /*
+  refreshOdometry();
 
+  //calculating distance differences
+  double dx = goal_x - x;
+  double dy = goal_y - y;
+
+  //Calculate distance to the goal
+  dist_to_goal = sqrt((dx * dx) + (dy * dy));
+
+  if (dist_to_goal < 10.0) {
+    //If we are less than 0.1 meters of the goal stop
+    motors.setSpeeds(0, 0);
+  } else {
+    //calculating target angle based on current position
+    angle_to_goal = atan2(dy, dx);
+
+      //calculating the acutal angle
+    actual_angle = atan2(sin(theta), cos(theta));
+
+    //Run PID to get correct heading
+    PIDout_theta = pidcontroller.update(actual_angle, angle_to_goal);
+    PIDout_distance = pidcontroller_vel.update(dist_to_goal, 0.0);
+    //Applying to motors
+    int leftVelocity = (int)constrain(calculateLeftWheelVelocity(base_speedVel*PIDout_distance, PIDout_theta), -400, 400);
+    int rightVelocity = (int)constrain(calculateRightWheelVelocity(base_speedVel*PIDout_distance, PIDout_theta), -400, 400);
+    motors.setSpeeds(leftVelocity, rightVelocity);
+
+    //Print outputs
+    Serial.print("X: "); 
+    Serial.println(x);
+    Serial.print("Y: "); 
+    Serial.println(y);
+    Serial.print("Distance to goal: "); 
+    Serial.println(dist_to_goal);
+    Serial.print("PIDout_distance: "); 
+    Serial.println(PIDout_distance);
+    Serial.println("-----\n");
+  }
+*/
 
 }
 
